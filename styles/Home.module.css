@@ -1,0 +1,94 @@
+.main {
+  padding: 2rem;
+  text-align: center;
+}
+
+.title {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.description {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+}
+
+/* Блок популярных объявлений */
+.popularAdsSection {
+  margin: 2rem auto;
+  padding: 1rem;
+  background: #f9f9f9;
+  border-radius: 8px;
+  max-width: 800px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.popularAdsList {
+  list-style: none;
+  padding: 0;
+}
+
+.popularAdItem {
+  margin-bottom: 0.5rem;
+}
+
+.popularAdLink {
+  color: #0070f3;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.popularAdLink:hover {
+  text-decoration: underline;
+}
+
+/* Форма поиска */
+.searchSection {
+  margin-top: 2rem;
+  padding: 1rem;
+  background: #f9f9f9;
+  border-radius: 8px;
+  max-width: 800px;
+  margin: 2rem auto;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.searchForm {
+  display: flex;
+  flex-direction: column;
+}
+
+.formGroup {
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.label {
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+
+.selectField {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 0.5rem;
+  width: 100%;
+  max-width: 300px;
+}
+
+.submitButton {
+  background-color: #0070f3;
+  color: white;
+  border: none;
+  cursor: pointer;
+  padding: 0.75rem;
+  border-radius: 4px;
+  width: 100%;
+  max-width: 300px;
+}
+
+.submitButton:hover {
+  background-color: #005bb5;
+}

@@ -1,0 +1,140 @@
+.searchFormContainer {
+    margin: 2rem 0;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .searchForm {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .dropdownContainer {
+    position: relative;
+    flex: 1 1 50px;
+  }
+  
+  .dropdownButton {
+    width: 100%;
+    padding: 0.3rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    background-color: #fff;
+    color: #000; /* Черный текст */
+    text-align: left;
+    cursor: pointer;
+    box-sizing: border-box;
+    height: 30px; /* Размеры как у поля "Когда" */
+  }
+  
+  .dropdownMenu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    max-height: 150px;
+    overflow-y: auto;
+    z-index: 10;
+  }
+  
+  .dropdownItem {
+    padding: 0.5rem;
+    cursor: pointer;
+    font-size: 0.8rem;
+    color: #000; /* Черный текст */
+  }
+  
+  .dropdownItem:hover {
+    background-color: #f0f0f0;
+  }
+  
+  .dateField {
+    flex: 1 1 150px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 0.3rem;
+    font-size: 0.8rem;
+    min-width: 80px;
+    max-width: 200px;
+    height: 30px;
+    box-sizing: border-box;
+  }
+  
+  .dateGroup {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    flex: 1 1 auto;
+  }
+  
+  .checkboxLabel {
+    display: flex;
+    align-items: center;
+    font-size: 0.8rem;
+    white-space: nowrap;
+  }
+  
+  .submitButton {
+    background-color: #0070f3;
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding: 0.4rem 0.8rem;
+    border-radius: 4px;
+    flex-shrink: 0;
+    height: 30px;
+    font-size: 0.8rem;
+  }
+  
+  .submitButton:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  
+  .submitButton:hover:not(:disabled) {
+    background-color: #005bb5;
+  }
+  
+  /* Адаптация под мобильные устройства */
+  @media (max-width: 768px) {
+    .searchForm {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0.5rem; /* Уменьшено расстояние между полями */
+    }
+  
+    .dropdownButton, .dateField {
+      width: 100%;
+      padding: 0.3rem;
+      font-size: 0.8rem;
+      height: 28px;
+    }
+  
+    .dateGroup {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0.5rem; /* Уменьшено расстояние между полями внутри группы даты */
+    }
+  
+    .submitButton {
+      width: 100%;
+      padding: 0.3rem 0.6rem;
+      font-size: 0.8rem;
+      height: 28px;
+      text-align: center;
+    }
+  }

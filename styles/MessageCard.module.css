@@ -1,0 +1,12 @@
+.card {
+    border: 1px solid #ddd;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 5px;
+    background-color: #fff;
+  }
+  
+  .date {
+    font-size: 0.9rem;
+    color: #666;
+  }

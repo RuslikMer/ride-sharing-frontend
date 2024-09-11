@@ -1,0 +1,79 @@
+/* styles/pages/register.module.css */
+
+/* Стили, которые у вас уже были */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Центрирование по горизонтали */
+  justify-content: center; /* Центрирование по вертикали */
+  min-height: 100vh; /* Занимает всю высоту экрана */
+  background-color: #f0f0f0; /* Фоновый цвет */
+}
+
+.title {
+  margin-bottom: 20px;
+  font-size: 2rem;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  width: 300px; /* Ширина формы */
+  background-color: #fff; /* Фоновый цвет формы */
+  padding: 20px; /* Отступы внутри формы */
+  border-radius: 8px; /* Скругление углов */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Тень формы */
+}
+
+.form div {
+  margin-bottom: 15px; /* Отступы между элементами формы */
+}
+
+.form input {
+  width: 100%; /* Ширина поля ввода */
+  padding: 10px; /* Внутренние отступы */
+  border: 1px solid #ccc; /* Граница */
+  border-radius: 4px; /* Скругление углов */
+  font-size: 1rem; /* Размер шрифта */
+}
+
+.form button {
+  background-color: #0070f3; /* Цвет фона кнопки */
+  color: #fff; /* Цвет текста кнопки */
+  border: none; /* Убираем границу */
+  padding: 10px; /* Внутренние отступы */
+  border-radius: 4px; /* Скругление углов */
+  cursor: pointer; /* Указатель курсора */
+  font-size: 1rem; /* Размер шрифта */
+}
+
+.form button:hover {
+  background-color: #005bb5; /* Цвет фона при наведении */
+}
+
+.form input::placeholder {
+  color: #888; /* Цвет текста плейсхолдера */
+  font-size: 1rem; /* Размер шрифта плейсхолдера */
+}
+
+/* Новые стили для глазков в полях паролей */
+.eyeIcon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 1.2rem;
+}
+
+/* Стиль для ошибки при несовпадении паролей */
+.errorMessage {
+  color: red;
+  font-size: 0.9rem;
+  margin-bottom: 15px;
+}
+
+/* Стили для выделения полей красным при ошибке */
+.inputError {
+  border-color: red;
+}

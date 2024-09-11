@@ -1,0 +1,20 @@
+/* Обертка для всей страницы */
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Основное содержимое страницы */
+.content {
+  flex: 1; /* Этот стиль растягивает контент, заполняя оставшееся пространство */
+}
+
+/* Футер */
+.footer {
+  background-color: #333;
+  color: white;
+  text-align: center;
+  padding: 1rem;
+  width: 100%;
+}

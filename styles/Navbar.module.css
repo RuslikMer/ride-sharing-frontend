@@ -1,0 +1,126 @@
+/* Основной блок навигации */
+.navbar {
+  background-color: #0070f3; /* Основной цвет фона навигации */
+  padding: 1rem;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative; 
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1; /* Сниженный z-index для обычного состояния */
+  transition: transform 0.3s ease, z-index 0.3s ease; /* Плавное изменение transform и z-index */
+}
+
+/* Стили для фиксированного состояния */
+.fixed {
+  position: fixed; /* Фиксированное позиционирование при скролле */
+  z-index: 999; /* Повышенный z-index для фиксированного состояния */
+  transform: translateY(0); /* Позиция элемента */
+}
+
+/* Вспомогательный класс для перемещения вниз при переходе в фиксированное состояние */
+.navbar-transition {
+  transform: translateY(-100%); /* Перемещение элемента за пределы экрана */
+}
+
+/* Стили для списка навигации */
+.navbar ul {
+  list-style: none;
+  display: flex;
+  gap: 1rem;
+  padding: 0;
+  margin: 0;
+}
+
+/* Стили для элементов списка навигации */
+.navbar li {
+  margin: 0;
+}
+
+/* Стили для ссылок */
+.navbar a {
+  color: white;
+  text-decoration: none;
+}
+
+.navbar a:hover {
+  text-decoration: underline;
+}
+
+/* Бургер-меню */
+.menuToggle {
+  display: none;
+  cursor: pointer;
+  font-size: 1.5rem;
+  color: white;
+  transition: transform 0.3s ease; /* Плавный переход для значка меню */
+}
+
+.menuIcon {
+  font-size: 1.5rem;
+  transition: transform 0.3s ease; /* Плавный переход для значка меню */
+}
+
+.menuIcon.open {
+  transform: rotate(45deg); /* Поворот для крестика */
+}
+
+/* Стиль для выпадающего меню */
+.navList {
+  display: flex;
+}
+
+.navList.open {
+  display: flex;
+}
+
+.navList li {
+  margin: 0;
+}
+
+.loginButton {
+  color: white;
+  font-size: 1rem;
+  text-decoration: none;
+}
+
+/* Адаптивные стили */
+@media (max-width: 768px) {
+  .navbar {
+    background: #0070f3; /* Непрозрачный фон */
+    display: flex;
+    flex-direction: column; /* Вертикальное расположение для мобильных устройств */
+    align-items: flex-start; /* Выравнивание по левому краю */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Тень для разделения с другими элементами */
+    z-index: 1; /* Сниженный z-index для основного блока */
+  }
+
+  .navbar ul {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    position: fixed; /* Закрепление под навигацией */
+    top: 60px; /* Расположение под навигацией */
+    left: 0;
+    background: rgba(0, 112, 243, 0.9); /* Полупрозрачный фон для выпадающего меню */
+    padding: 1rem;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, opacity 0.3s ease;
+    opacity: 0; /* Начальная прозрачность */
+    z-index: 999; /* Меню должно быть поверх других элементов */
+  }
+
+  .navbar ul.open {
+    display: flex;
+    max-height: 100vh; /* Устанавливаем высоту во всю видимую часть экрана */
+    opacity: 1; /* Полная непрозрачность при открытии */
+  }
+
+  .menuToggle {
+    display: block;
+  }
+}
