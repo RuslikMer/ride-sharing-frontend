@@ -3,6 +3,7 @@ import Select from 'react-select';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import styles from '../styles/CreateAdForm.module.css';
+import { postRequest } from '../utils/api';
 
 // Список стран и городов
 const countryOptions = [
@@ -38,7 +39,7 @@ export default function CreateAdForm() {
     destinationCity: '',
     departureDate: new Date(),
     isAlreadyOnVacation: false,
-    daysCount: '',
+    daysCount: 0,
     paymentOption: '',
     description: '',
   });
@@ -82,9 +83,10 @@ export default function CreateAdForm() {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+  
     setFormData({
       ...formData,
-      [name]: value,
+      [name]: name === 'daysCount' ? parseInt(value, 10) || 0 : value, // Преобразование daysCount в число
     });
   };
 
@@ -147,9 +149,31 @@ export default function CreateAdForm() {
     });
   };
 
-  const handleSubmit = (e) => {
+  // Добавляем функцию отправки данных на сервер
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Логика отправки формы
+  
+    try {
+      const response = await postRequest('/ads', {
+        lookingFor: formData.lookingFor?.value,
+        departureCountry: formData.departureCountry?.value,
+        departureCity: formData.departureCity,
+        destinationCountry: formData.destinationCountry?.value,
+        destinationCity: formData.destinationCity,
+        departureDate: formData.departureDate.getTime(), // Преобразуем дату в timestamp
+        isAlreadyOnVacation: formData.isAlreadyOnVacation,
+        daysCount: formData.daysCount,
+        paymentOption: formData.paymentOption,
+        description: formData.description,
+      });
+  
+      if (response.status === 201) {
+        alert('Объявление успешно создано!');
+      }
+    } catch (error) {
+      console.error('Ошибка при создании объявления:', error);
+      alert('Произошла ошибка при создании объявления.');
+    }
   };
 
   // Формируем список опций для выбора городов
