@@ -1,19 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import Select from 'react-select';
+import { Box, Button, Checkbox, FormControl, Heading } from '@chakra-ui/react';
+import SelectComponent from 'react-select';
 import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
-import styles from '../styles/CreateAdForm.module.css';
 import { postRequest } from '../utils/api';
-
-// Список стран и городов
-const countryOptions = [
-  { value: 'ru', label: 'Россия' },
-  { value: 'us', label: 'США' },
-  { value: 'de', label: 'Германия' },
-  { value: 'fr', label: 'Франция' },
-  { value: 'it', label: 'Италия' },
-  // Добавьте другие страны по необходимости
-];
+import SelectCountry from './SelectCountry';
+import SelectCity from './SelectCity';
+import LookingFor from './LookingFor';
+import DepartureDate from './DepartureDate';
+import DaysCount from './DaysCount';
+import PaymentOption from './PaymentOption';
+import Description from './Description';
+import 'react-datepicker/dist/react-datepicker.css';
 
 const cities = {
   ru: ['Москва', 'Санкт-Петербург', 'Новосибирск'],
@@ -21,14 +18,7 @@ const cities = {
   de: ['Берлин', 'Мюнхен', 'Франкфурт'],
   fr: ['Париж', 'Марсель', 'Лион'],
   it: ['Рим', 'Милан', 'Венеция'],
-  // Добавьте другие города по необходимости
 };
-
-const lookingForOptions = [
-  { value: 'companion', label: 'Попутчика' },
-  { value: 'companion-female', label: 'Попутчицу' },
-  { value: 'group', label: 'Компанию' },
-];
 
 export default function CreateAdForm() {
   const [formData, setFormData] = useState({
@@ -83,10 +73,10 @@ export default function CreateAdForm() {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-  
+
     setFormData({
       ...formData,
-      [name]: name === 'daysCount' ? parseInt(value, 10) || 0 : value, // Преобразование daysCount в число
+      [name]: name === 'daysCount' ? parseInt(value, 10) || 0 : value,
     });
   };
 
@@ -97,62 +87,9 @@ export default function CreateAdForm() {
     });
   };
 
-  const handleDateChange = (date) => {
-    setFormData({
-      ...formData,
-      departureDate: date,
-    });
-  };
-
-  const handleCountryChange = (selectedOption) => {
-    const selectedCountry = selectedOption.value;
-    setFormData({
-      ...formData,
-      destinationCountry: selectedOption,
-      destinationCity: '', // Сбрасываем город назначения при смене страны
-    });
-  
-    // Обновляем список городов для выбранной страны
-    setDestinationCityOptions(cities[selectedCountry] || []);
-  };
-
-  const handleDepartureCountryChange = (selectedOption) => {
-    const selectedCountry = selectedOption.value;
-    setFormData({
-      ...formData,
-      departureCountry: selectedOption,
-      departureCity: '', // Сбрасываем город отправления при смене страны
-    });
-  
-    // Обновляем список городов для выбранной страны
-    setDepartureCityOptions(cities[selectedCountry] || []);
-  };
-
-  const handleDepartureCityChange = (selectedOption) => {
-    setFormData({
-      ...formData,
-      departureCity: selectedOption ? selectedOption.value : '',
-    });
-  };
-
-  const handleDestinationCityChange = (selectedOption) => {
-    setFormData({
-      ...formData,
-      destinationCity: selectedOption ? selectedOption.value : '',
-    });
-  };
-
-  const handleLookingForChange = (selectedOption) => {
-    setFormData({
-      ...formData,
-      lookingFor: selectedOption,
-    });
-  };
-
-  // Добавляем функцию отправки данных на сервер
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     try {
       const response = await postRequest('/ads', {
         lookingFor: formData.lookingFor?.value,
@@ -160,13 +97,13 @@ export default function CreateAdForm() {
         departureCity: formData.departureCity,
         destinationCountry: formData.destinationCountry?.value,
         destinationCity: formData.destinationCity,
-        departureDate: formData.departureDate.getTime(), // Преобразуем дату в timestamp
+        departureDate: formData.departureDate.getTime(),
         isAlreadyOnVacation: formData.isAlreadyOnVacation,
         daysCount: formData.daysCount,
         paymentOption: formData.paymentOption,
         description: formData.description,
       });
-  
+
       if (response.status === 201) {
         alert('Объявление успешно создано!');
       }
@@ -176,123 +113,51 @@ export default function CreateAdForm() {
     }
   };
 
-  // Формируем список опций для выбора городов
-  const departureCityOptionsList = departureCityOptions.map((city) => ({ value: city, label: city }));
-  const destinationCityOptionsList = destinationCityOptions.map((city) => ({ value: city, label: city }));
-
   return (
-    <div className={styles.createAdFormContainer}>
-      <h2 className={styles.title}>Создать объявление</h2>
-      <form onSubmit={handleSubmit} className={styles.form}>
-        <label htmlFor="lookingFor" className={styles.label}>Ищу</label>
-        <Select
-          name="lookingFor"
-          options={lookingForOptions}
-          value={formData.lookingFor}
-          onChange={handleLookingForChange}
-          placeholder="Выберите тип попутчика"
-          className={styles.selectField}
-        />
-
-        <label htmlFor="departureCountry" className={styles.label}>Страна отправления</label>
-        <Select
-          name="departureCountry"
-          options={countryOptions}
-          value={formData.departureCountry}
-          onChange={handleDepartureCountryChange}
-          placeholder="Выберите страну отправления"
-          className={styles.selectField}
-        />
-
-        <label htmlFor="departureCity" className={styles.label}>Город отправления</label>
-        <Select
-          name="departureCity"
-          options={departureCityOptionsList}
-          value={formData.departureCity ? { value: formData.departureCity, label: formData.departureCity } : null}
-          onChange={handleDepartureCityChange}
-          placeholder="Выберите город отправления"
+    <Box maxWidth="600px" margin="0 auto" padding="4" backgroundColor="#f9f9f9" borderRadius="8px" boxShadow="md">
+      <Heading as="h2" size="lg" marginBottom="4">Создать объявление</Heading>
+      <form onSubmit={handleSubmit}>
+        <LookingFor formData={formData} setFormData={setFormData} />
+        <SelectCountry formData={formData} setFormData={setFormData} setDepartureCityOptions={setDepartureCityOptions} />
+        <SelectCity
+          label="Город отправления"
+          options={departureCityOptions}
+          value={formData.departureCity}
+          onChange={(value) => setFormData({ ...formData, departureCity: value })}
           isDisabled={!formData.departureCountry}
-          required
-          className={styles.selectField}
         />
-
-        <label htmlFor="destinationCountry" className={styles.label}>Страна назначения</label>
-        <Select
-          name="destinationCountry"
-          options={countryOptions}
-          value={formData.destinationCountry}
-          onChange={handleCountryChange}
-          placeholder="Выберите страну назначения"
-          className={styles.selectField}
+        <SelectCountry
+          formData={formData}
+          setFormData={setFormData}
+          setDestinationCityOptions={setDestinationCityOptions}
+          isDestination
         />
-
-        <label htmlFor="destinationCity" className={styles.label}>Город назначения</label>
-        <Select
-          name="destinationCity"
-          options={destinationCityOptionsList}
-          value={formData.destinationCity ? { value: formData.destinationCity, label: formData.destinationCity } : null}
-          onChange={handleDestinationCityChange}
-          placeholder="Введите город назначения (не обязательно)"
-          isClearable
+        <SelectCity
+          label="Город назначения"
+          options={destinationCityOptions}
+          value={formData.destinationCity}
+          onChange={(value) => setFormData({ ...formData, destinationCity: value })}
           isDisabled={!formData.destinationCountry}
-          className={styles.selectField}
         />
-
-        <label htmlFor="departureDate" className={styles.label}>Дата отправления</label>
-        <DatePicker
-          selected={formData.departureDate}
-          onChange={handleDateChange}
-          minDate={new Date()}
-          disabled={formData.isAlreadyOnVacation}
-          className={styles.inputField}
+        <DepartureDate
+          selectedDate={formData.departureDate}
+          handleDateChange={(date) => setFormData({ ...formData, departureDate: date })}
+          isAlreadyOnVacation={formData.isAlreadyOnVacation}
         />
-
-        <div className={styles.checkboxGroup}>
-          <input
-            type="checkbox"
-            checked={formData.isAlreadyOnVacation}
-            onChange={handleCheckboxChange}
-          />
-          <label>Уже отдыхаю</label>
-        </div>
-
-        <label htmlFor="daysCount" className={styles.label}>На сколько дней?</label>
-        <input
-          type="number"
-          name="daysCount"
-          value={formData.daysCount}
-          onChange={handleInputChange}
-          placeholder="Введите количество дней"
-          className={styles.narrowInputField}
-          required
-        />
-
-        <label htmlFor="paymentOption" className={styles.label}>Оплата тура</label>
-        <select
-          name="paymentOption"
-          value={formData.paymentOption}
-          onChange={handleInputChange}
-          className={styles.selectField}
-          required
+        <Checkbox
+          isChecked={formData.isAlreadyOnVacation}
+          onChange={handleCheckboxChange}
+          marginBottom="4"
         >
-          <option value="">Выберите способ оплаты</option>
-          <option value="sponsorship">Спонсорство</option>
-          <option value="negotiable">По договоренности</option>
-        </select>
-
-        <label htmlFor="description" className={styles.label}>Описание</label>
-        <textarea
-          name="description"
-          value={formData.description}
-          onChange={handleInputChange}
-          placeholder="Как вы видите ваше путешествие и с кем хотели бы в него отправиться"
-          className={styles.textareaField}
-          style={{ maxHeight: '300px', overflowY: 'auto' }}
-          maxLength="1000"
-        />
-
-        <button type="submit" className={styles.submitButton}>Создать объявление</button>
+          Я уже в отпуске
+        </Checkbox>
+        <DaysCount value={formData.daysCount} handleInputChange={handleInputChange} />
+        <PaymentOption value={formData.paymentOption} handleInputChange={handleInputChange} />
+        <Description value={formData.description} handleInputChange={handleInputChange} />
+        <Button type="submit" colorScheme="teal" width="full">
+          Создать объявление
+        </Button>
       </form>
-    </div>
+    </Box>
   );
 }

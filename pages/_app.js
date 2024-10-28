@@ -1,15 +1,21 @@
-import '../styles/globals.css';
+// _app.js
+import { ChakraProvider } from "@chakra-ui/react";
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import { CountryProvider } from '../context/CountryContext'; // Импортируйте CountryProvider
+import { CountryProvider } from '../context/CountryContext';
+import CookieConsent from '../components/CookieConsent';
+import '../styles/globals.css';
 
 function MyApp({ Component, pageProps }) {
   return (
-    <CountryProvider> {/* Оберните все компоненты в CountryProvider */}
-      <Navbar />
-      <Component {...pageProps} />
-      <Footer />
-    </CountryProvider>
+    <ChakraProvider>
+      <CountryProvider>
+        <Navbar />
+        <Component {...pageProps} />
+        <Footer />
+        <CookieConsent />
+      </CountryProvider>
+    </ChakraProvider>
   );
 }
 

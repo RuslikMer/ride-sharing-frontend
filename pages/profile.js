@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { getRequest } from '../utils/api';
 import { getAuthHeaders, removeToken } from '../utils/auth';
-import styles from '../styles/Home.module.css';
+import { Box, Heading, Text, Spinner, Alert } from '@chakra-ui/react';
 
 export default function Profile() {
   const [profile, setProfile] = useState(null);
@@ -13,7 +13,7 @@ export default function Profile() {
         const data = await getRequest('/auth/profile', { headers: getAuthHeaders() });
         setProfile(data);
       } catch (error) {
-        setError('Failed to load profile.');
+        setError('Не удалось загрузить профиль.');
         // Очистка токена и перенаправление на страницу входа при ошибке
         removeToken();
         window.location.href = '/';
@@ -23,19 +23,25 @@ export default function Profile() {
     fetchProfile();
   }, []);
 
-  if (error) return <p>{error}</p>;
+  if (error) {
+    return (
+      <Alert status="error" variant="solid" mb={4}>
+        {error}
+      </Alert>
+    );
+  }
 
   return (
-    <div className={styles.main}>
-      <h1 className={styles.title}>Profile</h1>
+    <Box p={6}>
+      <Heading as="h1" mb={4}>Профиль</Heading>
       {profile ? (
-        <div>
-          <p>Email: {profile.email}</p>
-          <p>Joined: {new Date(profile.createdAt).toLocaleDateString()}</p>
-        </div>
+        <Box>
+          <Text fontSize="lg" mb={2}>Email: {profile.email}</Text>
+          <Text fontSize="lg">Дата регистрации: {new Date(profile.createdAt).toLocaleDateString()}</Text>
+        </Box>
       ) : (
-        <p>Loading...</p>
+        <Spinner size="lg" />
       )}
-    </div>
+    </Box>
   );
 }
