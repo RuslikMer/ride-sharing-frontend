@@ -1,4 +1,14 @@
 import { useState } from 'react';
+import {
+  Box,
+  Button,
+  Checkbox,
+  FormControl,
+  Select,
+  Flex,
+  IconButton,
+} from '@chakra-ui/react';
+import { FaPlaneDeparture, FaMapMarkerAlt, FaUsers, FaCalendarAlt } from 'react-icons/fa';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import styles from '../styles/SearchForm.module.css';
@@ -17,44 +27,6 @@ const lookingForOptions = [
   { value: 'company', label: 'Компанию' },
 ];
 
-function Dropdown({ options, selectedLabel, onSelect, placeholder }) {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const handleButtonClick = () => {
-    setIsOpen(!isOpen);
-  };
-
-  const handleOptionClick = (option) => {
-    onSelect(option);
-    setIsOpen(false);
-  };
-
-  return (
-    <div className={styles.dropdownContainer}>
-      <button
-        type="button"
-        className={styles.dropdownButton}
-        onClick={handleButtonClick}
-      >
-        {selectedLabel || placeholder}
-      </button>
-      {isOpen && (
-        <div className={styles.dropdownMenu}>
-          {options.map((option) => (
-            <div
-              key={option.value}
-              className={styles.dropdownItem}
-              onClick={() => handleOptionClick(option)}
-            >
-              {option.label}
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}
-
 export default function SearchForm() {
   const [searchParams, setSearchParams] = useState({
     departureCountry: '',
@@ -64,8 +36,8 @@ export default function SearchForm() {
     isAlreadyOnVacation: false,
   });
 
-  const handleSearchChange = (name, label) => {
-    setSearchParams((prev) => ({ ...prev, [name]: label }));
+  const handleSearchChange = (name, value) => {
+    setSearchParams((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleDateChange = (date) => {
@@ -95,55 +67,89 @@ export default function SearchForm() {
   };
 
   return (
-    <div className={styles.searchFormContainer}>
-      <form onSubmit={handleSearchSubmit} className={styles.searchForm}>
-        <Dropdown
-          options={countryOptions}
-          selectedLabel={searchParams.departureCountry}
-          onSelect={(option) => handleSearchChange('departureCountry', option.label)}
-          placeholder="Откуда едем"
-        />
-        <Dropdown
-          options={countryOptions}
-          selectedLabel={searchParams.destinationCountry}
-          onSelect={(option) => handleSearchChange('destinationCountry', option.label)}
-          placeholder="Куда едем"
-        />
-        <Dropdown
-          options={lookingForOptions}
-          selectedLabel={searchParams.lookingFor}
-          onSelect={(option) => handleSearchChange('lookingFor', option.label)}
-          placeholder="Тип попутчика"
-        />
-        <div className={styles.dateGroup}>
-          <DatePicker
-            selected={searchParams.date}
-            onChange={handleDateChange}
-            minDate={new Date()}
-            disabled={searchParams.isAlreadyOnVacation}
-            placeholderText="Когда"
-            dateFormat="dd/MM/yyyy"
-            className={styles.dateField}
-            showYearDropdown
-            showMonthDropdown
-          />
-          <label className={styles.checkboxLabel}>
-            <input
-              type="checkbox"
-              checked={searchParams.isAlreadyOnVacation}
-              onChange={handleCheckboxChange}
+    <Box className={styles.searchBox} padding="1rem" borderWidth="1px" borderRadius="8px" backgroundColor="#F7F8FA" boxShadow="sm">
+      <form onSubmit={handleSearchSubmit}>
+        <Flex justify="space-between" alignItems="center" wrap="wrap" gap="1rem">
+          <FormControl className={styles.formControl}>
+            <IconButton icon={<FaPlaneDeparture />} aria-label="Откуда едем" marginRight="0.5rem" />
+            <Select
+              value={searchParams.departureCountry}
+              onChange={(e) => handleSearchChange('departureCountry', e.target.value)}
+              placeholder="Откуда едем"
+              className={styles.selectField}
+            >
+              {countryOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </Select>
+          </FormControl>
+
+          <FormControl className={styles.formControl}>
+            <IconButton icon={<FaMapMarkerAlt />} aria-label="Куда едем" marginRight="0.5rem" />
+            <Select
+              value={searchParams.destinationCountry}
+              onChange={(e) => handleSearchChange('destinationCountry', e.target.value)}
+              placeholder="Куда едем"
+              className={styles.selectField}
+            >
+              {countryOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </Select>
+          </FormControl>
+
+          <FormControl className={styles.formControl}>
+            <IconButton icon={<FaUsers />} aria-label="Тип попутчика" marginRight="0.5rem" />
+            <Select
+              value={searchParams.lookingFor}
+              onChange={(e) => handleSearchChange('lookingFor', e.target.value)}
+              placeholder="Тип попутчика"
+              className={styles.selectField}
+            >
+              {lookingForOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </Select>
+          </FormControl>
+
+          <FormControl className={styles.formControl}>
+            <IconButton icon={<FaCalendarAlt />} aria-label="Дата" marginRight="0.5rem" />
+            <DatePicker
+              selected={searchParams.date}
+              onChange={handleDateChange}
+              minDate={new Date()}
+              disabled={searchParams.isAlreadyOnVacation}
+              placeholderText="Когда"
+              dateFormat="dd/MM/yyyy"
+              className={styles.datePicker}
             />
+          </FormControl>
+
+          <Checkbox
+            isChecked={searchParams.isAlreadyOnVacation}
+            onChange={handleCheckboxChange}
+            className={styles.formControl}
+          >
             Уже отдыхаю
-          </label>
-        </div>
-        <button
+          </Checkbox>
+        </Flex>
+
+        <Button
           type="submit"
-          className={styles.submitButton}
-          disabled={isButtonDisabled}
+          colorScheme="blue"
+          isDisabled={isButtonDisabled}
+          width="100%"
+          marginTop="1rem"
         >
-          Поиск
-        </button>
+          Найти
+        </Button>
       </form>
-    </div>
+    </Box>
   );
 }

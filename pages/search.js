@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import styles from '../styles/Search.module.css';
+import { Box, Button, Heading, List, ListItem, Link } from '@chakra-ui/react';
 
 // Моковые данные для объявлений (замените на реальный запрос к API)
 const ads = Array.from({ length: 50 }, (_, index) => ({
@@ -24,29 +24,33 @@ export default function Search() {
   };
 
   return (
-    <div>
-      <h1>Результаты поиска</h1>
-      <section className={styles.searchResultsSection}>
-        <ul className={styles.searchResultsList}>
+    <Box p={6}>
+      <Heading as="h1" mb={4}>Результаты поиска</Heading>
+      <section>
+        <List spacing={3}>
           {paginatedAds.map(ad => (
-            <li key={ad.id}>
-              <a href={`/ad/${ad.id}`} className={styles.searchResultLink}>
+            <ListItem key={ad.id} p={2} borderWidth={1} borderRadius="md" bg="white" boxShadow="sm">
+              <Link href={`/ad/${ad.id}`} color="blue.500" fontWeight="bold">
                 {ad.title}
-              </a>
-            </li>
+              </Link>
+            </ListItem>
           ))}
-        </ul>
+        </List>
 
         {/* Пагинация */}
-        <div className={styles.pagination}>
+        <Box mt={4}>
           {page > 1 && (
-            <button onClick={() => handlePageChange(page - 1)}>Предыдущая</button>
+            <Button onClick={() => handlePageChange(page - 1)} mr={2}>
+              Предыдущая
+            </Button>
           )}
           {page < totalPages && (
-            <button onClick={() => handlePageChange(page + 1)}>Следующая</button>
+            <Button onClick={() => handlePageChange(page + 1)}>
+              Следующая
+            </Button>
           )}
-        </div>
+        </Box>
       </section>
-    </div>
+    </Box>
   );
 }

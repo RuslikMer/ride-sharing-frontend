@@ -1,36 +1,16 @@
 import Head from 'next/head';
 import Link from 'next/link';
-import styles from '../styles/Home.module.css';
+import { Box, Heading, Text, VStack, List, ListItem, Button } from '@chakra-ui/react';
 import SearchForm from '../components/SearchForm';
 import { useState } from 'react';
 
-// Моковые данные для популярных объявлений (замените на реальный запрос к API)
+// Моковые данные для популярных объявлений
 const popularAds = [
   { id: 1, title: 'Поездка в Москву', views: 150 },
   { id: 2, title: 'Поездка в Париж', views: 120 },
   { id: 3, title: 'Поездка в Нью-Йорк', views: 100 },
   { id: 4, title: 'Поездка в Рим', views: 90 },
   { id: 5, title: 'Поездка в Токио', views: 85 },
-];
-
-const countryOptions = [
-  { value: 'ru', label: 'Россия' },
-  { value: 'us', label: 'США' },
-  { value: 'de', label: 'Германия' },
-  { value: 'fr', label: 'Франция' },
-  { value: 'it', label: 'Италия' },
-  // Добавьте другие страны по необходимости
-];
-
-const lookingForOptions = [
-  { value: 'companion', label: 'Попутчик' },
-  { value: 'companion_female', label: 'Попутчицу' },
-  { value: 'company', label: 'Компанию' },
-];
-
-const paymentOptions = [
-  { value: 'sponsorship', label: 'Спонсорство' },
-  { value: 'negotiable', label: 'По договоренности' },
 ];
 
 export default function Home() {
@@ -52,32 +32,35 @@ export default function Home() {
   };
 
   return (
-    <div>
+    <Box p={4} bg="gray.50" minH="100vh">
       <Head>
         <title>Ride Sharing</title>
         <meta name="description" content="Ride Sharing App" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className={styles.main}>
-        <h1 className={styles.title}>Welcome to Ride Sharing</h1>
-        <p className={styles.description}>Find travel partners and manage your rides.</p>
+      <VStack spacing={8} align="stretch">
+        <Box textAlign="center">
+          <Heading as="h1" size="2xl">Добро пожаловать в Ride Sharing</Heading>
+          <Text fontSize="lg" mt={2}>Найдите попутчиков и управляйте своими поездками.</Text>
+        </Box>
 
-        <SearchForm />
+        <SearchForm onChange={handleSearchChange} onSubmit={handleSearchSubmit} />
+
         {/* Блок популярных объявлений */}
-        <section className={styles.popularAdsSection}>
-          <h2>Популярные объявления</h2>
-          <ul className={styles.popularAdsList}>
+        <Box>
+          <Heading as="h2" size="lg" mb={4}>Популярные объявления</Heading>
+          <List spacing={3}>
             {popularAds.map(ad => (
-              <li key={ad.id} className={styles.popularAdItem}>
-                <Link href={`/ad/${ad.id}`} className={styles.popularAdLink}>
-                  {ad.title}
+              <ListItem key={ad.id}>
+                <Link href={`/ad/${ad.id}`}>
+                  <Button variant="link" colorScheme="blue">{ad.title}</Button>
                 </Link>
-              </li>
+              </ListItem>
             ))}
-          </ul>
-        </section>
-      </main>
-    </div>
+          </List>
+        </Box>
+      </VStack>
+    </Box>
   );
 }
