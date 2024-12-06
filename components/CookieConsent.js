@@ -5,14 +5,14 @@ const CookieConsent = () => {
   const [showConsent, setShowConsent] = useState(false);
 
   useEffect(() => {
-    const consent = localStorage.getItem('cookieConsent');
+    const consent = sessionStorage.getItem('cookieConsent');
     if (!consent) {
       setShowConsent(true);
     }
   }, []);
 
   const handleAccept = () => {
-    localStorage.setItem('cookieConsent', 'true');
+    sessionStorage.setItem('cookieConsent', 'true');
     setShowConsent(false);
   };
 
