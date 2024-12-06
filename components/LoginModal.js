@@ -15,8 +15,7 @@ import {
   ModalFooter,
   Text,
 } from '@chakra-ui/react';
-import { postRequest } from '../utils/api';
-import { setToken } from '../utils/auth';
+import { signIn } from 'next-auth/react';
 
 export default function LoginModal({ onClose, isOpen }) {
   const [email, setEmail] = useState('');
@@ -27,21 +26,17 @@ export default function LoginModal({ onClose, isOpen }) {
   const handleLogin = async (event) => {
     event.preventDefault();
 
-    try {
-      const response = await postRequest('/auth/login', { email, password });
-      const token = response.access_token;
+    const result = await signIn('credentials', {
+      redirect: false, // предотвращает автоматический редирект после входа
+      email,
+      password,
+    });
 
-      if (!token) {
-        throw new Error('Token not received');
-      }
-
-      // Сохраняем токен
-      setToken(token);
-      onClose(); // Закрываем модальное окно после успешного входа
-      router.push('/'); // Перенаправляем на страницу профиля
-    } catch (error) {
-      console.error('Login Error:', error);
+    if (result.error) {
       setError('Login failed. Please try again.');
+    } else {
+      onClose(); // Закрываем модальное окно после успешного входа
+      router.push('/'); // Перенаправляем на главную страницу
     }
   };
 

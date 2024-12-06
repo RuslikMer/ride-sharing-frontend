@@ -1,27 +1,38 @@
-import { useEffect, useState } from 'react';
-import { getRequest } from '../utils/api';
-import { getAuthHeaders, removeToken } from '../utils/auth';
+import { useState, useEffect } from 'react';
 import { Box, Heading, Text, Spinner, Alert } from '@chakra-ui/react';
+import { useRouter } from 'next/router';
 
 export default function Profile() {
   const [profile, setProfile] = useState(null);
   const [error, setError] = useState('');
+  const router = useRouter();
 
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const data = await getRequest('/auth/profile', { headers: getAuthHeaders() });
+        const response = await fetch('http://localhost:3000/api/auth/profile', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include', // Важно для передачи куки при запросе
+        });
+
+        if (!response.ok) {
+          throw new Error(`Ошибка: ${response.status}`);
+        }
+
+        const data = await response.json();
         setProfile(data);
       } catch (error) {
+        console.error('Ошибка при загрузке профиля:', error);
         setError('Не удалось загрузить профиль.');
-        // Очистка токена и перенаправление на страницу входа при ошибке
-        removeToken();
-        window.location.href = '/';
+        router.push('/login'); // Перенаправляем на страницу логина
       }
     };
 
     fetchProfile();
-  }, []);
+  }, [router]);
 
   if (error) {
     return (
@@ -31,17 +42,17 @@ export default function Profile() {
     );
   }
 
+  if (!profile) {
+    return <Spinner size="lg" />;
+  }
+
   return (
     <Box p={6}>
       <Heading as="h1" mb={4}>Профиль</Heading>
-      {profile ? (
-        <Box>
-          <Text fontSize="lg" mb={2}>Email: {profile.email}</Text>
-          <Text fontSize="lg">Дата регистрации: {new Date(profile.createdAt).toLocaleDateString()}</Text>
-        </Box>
-      ) : (
-        <Spinner size="lg" />
-      )}
+      <Box>
+        <Text fontSize="lg" mb={2}>Email: {profile.email}</Text>
+        <Text fontSize="lg">Дата регистрации: {new Date(profile.created_at).toLocaleDateString()}</Text>
+      </Box>
     </Box>
   );
 }
